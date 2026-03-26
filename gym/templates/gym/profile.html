@@ -3,121 +3,143 @@
 {% block title %}{{ user.username }}'s Profile - FitnessHub{% endblock %}
 
 {% block content %}
-<div class="row">
-    <div class="col-md-4 mb-4">
-        <div class="card shadow-sm border-0 h-100">
-            <div class="card-header bg-primary text-white py-3">
-                <h4 class="mb-0 text-center">User Information</h4>
-            </div>
-            <div class="card-body p-4 text-center">
-                <i class="bi bi-person-circle display-1 text-primary mb-3"></i>
-                <h3>{{ user.username }}</h3>
-                <p class="text-muted">{{ user.email }}</p>
-                <div class="d-grid mt-4">
-                    <a href="#" class="btn btn-outline-primary">Edit Profile</a>
-                </div>
+<section class="section-padding">
+    <div class="container">
+        <div class="row mb-5">
+            <div class="col-12">
+                <h6 class="text-primary-theme fw-bold text-uppercase mb-2">Member Portal</h6>
+                <h2 class="fw-bold fs-1 mb-0">My Account</h2>
             </div>
         </div>
-    </div>
 
-    <div class="col-md-8 mb-4">
-        <div class="card shadow-sm border-0 h-100">
-            <div class="card-header bg-dark text-white py-3">
-                <h4 class="mb-0 text-center">My Membership Applications</h4>
-            </div>
-            <div class="card-body p-4">
-                {% if applications %}
-                <div class="table-responsive">
-                    <table class="table table-hover">
-                        <thead class="table-light">
-                            <tr>
-                                <th>Plan</th>
-                                <th>Date Applied</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for app in applications %}
-                            <tr>
-                                <td>{{ app.plan.name }}</td>
-                                <td>{{ app.applied_on|date:"F j, Y" }}</td>
-                                <td>
-                                    {% if app.status == 'pending' %}
-                                        <span class="badge bg-warning text-dark">{{ app.status|title }}</span>
-                                    {% elif app.status == 'approved' %}
-                                        <span class="badge bg-success">{{ app.status|title }}</span>
-                                    {% else %}
-                                        <span class="badge bg-danger">{{ app.status|title }}</span>
-                                    {% endif %}
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+        <div class="row">
+            <!-- User Info Card -->
+            <div class="col-lg-4 mb-4">
+                <div class="card shadow-lg border-0 h-100 bg-black">
+                    <div class="card-header bg-primary-theme text-white py-4 text-center border-0">
+                        <h4 class="fw-bold text-uppercase mb-0 tracking-widest">Profile Info</h4>
+                    </div>
+                    <div class="card-body p-5 text-center">
+                        <div class="bg-dark rounded-circle d-inline-flex align-items-center justify-content-center mb-4" style="width: 120px; height: 120px; border: 4px solid var(--primary-theme);">
+                            <i class="bi bi-person-fill display-2 text-primary-theme"></i>
+                        </div>
+                        <h3 class="fw-bold mb-1">{{ user.username }}</h3>
+                        <p class="text-secondary mb-4">{{ user.email }}</p>
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-outline-light rounded-pill fw-bold text-uppercase py-2">Edit Profile</button>
+                            <button class="btn btn-outline-secondary rounded-pill fw-bold text-uppercase py-2">Account Settings</button>
+                        </div>
+                    </div>
                 </div>
-                {% else %}
-                <div class="text-center py-5">
-                    <p class="text-muted">You haven't applied for any membership yet.</p>
-                    <a href="{% url 'membership_plans' %}" class="btn btn-primary mt-3">Browse Plans</a>
-                </div>
-                {% endif %}
             </div>
-        </div>
-    </div>
-</div>
 
-<div class="row mt-4">
-    <div class="col-md-12">
-        <div class="card shadow-sm border-0">
-            <div class="card-header bg-success text-white py-3">
-                <h4 class="mb-0 text-center">My Shop Orders</h4>
+            <!-- Memberships Card -->
+            <div class="col-lg-8 mb-4">
+                <div class="card shadow-lg border-0 h-100 bg-black">
+                    <div class="card-header bg-dark text-white py-4 text-center border-0 border-bottom border-secondary">
+                        <h4 class="fw-bold text-uppercase mb-0 tracking-widest">My Memberships</h4>
+                    </div>
+                    <div class="card-body p-4">
+                        {% if applications %}
+                        <div class="table-responsive">
+                            <table class="table table-hover table-dark border-secondary align-middle">
+                                <thead>
+                                    <tr class="text-uppercase small tracking-widest">
+                                        <th class="border-secondary py-3">Plan</th>
+                                        <th class="border-secondary py-3">Applied Date</th>
+                                        <th class="border-secondary py-3 text-center">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for app in applications %}
+                                    <tr>
+                                        <td class="border-secondary py-3 fw-bold">{{ app.plan.name }}</td>
+                                        <td class="border-secondary py-3 text-secondary">{{ app.applied_on|date:"F j, Y" }}</td>
+                                        <td class="border-secondary py-3 text-center">
+                                            {% if app.status == 'pending' %}
+                                                <span class="badge bg-warning text-dark text-uppercase px-3 py-2 rounded-pill small fw-bold">Pending</span>
+                                            {% elif app.status == 'approved' %}
+                                                <span class="badge bg-success text-uppercase px-3 py-2 rounded-pill small fw-bold">Active</span>
+                                            {% else %}
+                                                <span class="badge bg-danger text-uppercase px-3 py-2 rounded-pill small fw-bold">Denied</span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        {% else %}
+                        <div class="text-center py-5">
+                            <i class="bi bi-calendar2-x display-1 text-secondary opacity-25 mb-4"></i>
+                            <p class="text-secondary fs-5 mb-4">No membership plans active yet.</p>
+                            <a href="{% url 'membership_plans' %}" class="btn btn-primary-theme text-white rounded-pill px-5 py-2 fw-bold text-uppercase">Browse Plans</a>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
             </div>
-            <div class="card-body p-4">
-                {% if user.orders.all %}
-                <div class="table-responsive">
-                    <table class="table table-hover">
-                        <thead class="table-light">
-                            <tr>
-                                <th>Order ID</th>
-                                <th>Date</th>
-                                <th>Items</th>
-                                <th>Total</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for order in user.orders.all %}
-                            <tr>
-                                <td>#{{ order.id }}</td>
-                                <td>{{ order.created|date:"F j, Y" }}</td>
-                                <td>
-                                    <ul class="list-unstyled mb-0 small">
-                                        {% for item in order.items.all %}
-                                            <li>{{ item.product.name }} (x{{ item.quantity }})</li>
-                                        {% endfor %}
-                                    </ul>
-                                </td>
-                                <td>${{ order.items.first.price }}</td> <!-- Simplified for now -->
-                                <td>
-                                    {% if order.paid %}
-                                        <span class="badge bg-success">Paid</span>
-                                    {% else %}
-                                        <span class="badge bg-warning text-dark">Processing</span>
-                                    {% endif %}
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+        </div>
+
+        <!-- Orders Section -->
+        <div class="row mt-5">
+            <div class="col-12">
+                <div class="card shadow-lg border-0 bg-black">
+                    <div class="card-header bg-black py-4 border-0 border-bottom border-secondary">
+                        <div class="row align-items-center">
+                            <div class="col-md-6 text-center text-md-start">
+                                <h4 class="fw-bold text-uppercase mb-0 tracking-widest"><i class="bi bi-cart3 text-primary-theme me-2"></i> Recent Orders</h4>
+                            </div>
+                            <div class="col-md-6 text-center text-md-end mt-3 mt-md-0">
+                                <a href="{% url 'shop_home' %}" class="btn btn-sm btn-outline-primary-theme rounded-pill px-4 fw-bold">GO TO SHOP</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body p-4">
+                        {% if user.orders.all %}
+                        <div class="table-responsive">
+                            <table class="table table-hover table-dark border-secondary align-middle">
+                                <thead>
+                                    <tr class="text-uppercase small tracking-widest text-secondary">
+                                        <th class="border-secondary py-3">Order ID</th>
+                                        <th class="border-secondary py-3">Date</th>
+                                        <th class="border-secondary py-3">Products</th>
+                                        <th class="border-secondary py-3">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for order in user.orders.all %}
+                                    <tr>
+                                        <td class="border-secondary py-3 fw-bold text-primary-theme">#{{ order.id }}</td>
+                                        <td class="border-secondary py-3">{{ order.created|date:"M j, Y" }}</td>
+                                        <td class="border-secondary py-3">
+                                            <div class="small">
+                                                {% for item in order.items.all %}
+                                                    <span class="d-block">{{ item.product.name }} <span class="text-secondary">(x{{ item.quantity }})</span></span>
+                                                {% endfor %}
+                                            </div>
+                                        </td>
+                                        <td class="border-secondary py-3">
+                                            {% if order.paid %}
+                                                <span class="text-success fw-bold"><i class="bi bi-check-circle-fill me-1"></i> PAID</span>
+                                            {% else %}
+                                                <span class="text-warning fw-bold"><i class="bi bi-clock-fill me-1"></i> PROCESSING</span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        {% else %}
+                        <div class="text-center py-5">
+                            <p class="text-secondary fs-5">You haven't placed any orders yet.</p>
+                        </div>
+                        {% endif %}
+                    </div>
                 </div>
-                {% else %}
-                <div class="text-center py-5">
-                    <p class="text-muted">You haven't placed any orders yet.</p>
-                    <a href="{% url 'shop_home' %}" class="btn btn-success mt-3">Shop Now</a>
-                </div>
-                {% endif %}
             </div>
         </div>
     </div>
-</div>
+</section>
 {% endblock %}

@@ -3,49 +3,95 @@
 {% block title %}Shop - FitnessHub{% endblock %}
 
 {% block content %}
-<div class="row">
-    <div class="col-md-3">
-        <h3 class="mb-4">Categories</h3>
-        <div class="list-group shadow-sm">
-            <a href="{% url 'shop_home' %}" class="list-group-item list-group-item-action {% if not category %}active{% endif %}">
-                All Products
-            </a>
-            {% for c in categories %}
-            <a href="{% url 'product_list_by_category' c.slug %}" class="list-group-item list-group-item-action {% if category.slug == c.slug %}active{% endif %}">
-                {{ c.name }}
-            </a>
-            {% endfor %}
+<section class="section-padding">
+    <div class="container">
+        <div class="row mb-5">
+            <div class="col-lg-6">
+                <h6 class="text-primary-theme fw-bold text-uppercase mb-2">Fitness Shop</h6>
+                <h2 class="fw-bold fs-1 mb-0">{% if category %}{{ category.name }}{% else %}Premium Products{% endif %}</h2>
+            </div>
+            <div class="col-lg-6 text-lg-end d-flex align-items-end justify-content-lg-end mt-4 mt-lg-0">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-0">
+                        <li class="breadcrumb-item"><a href="{% url 'shop_home' %}" class="text-primary-theme text-decoration-none">Shop</a></li>
+                        {% if category %}
+                            <li class="breadcrumb-item active text-white" aria-current="page">{{ category.name }}</li>
+                        {% else %}
+                            <li class="breadcrumb-item active text-white" aria-current="page">All Products</li>
+                        {% endif %}
+                    </ol>
+                </nav>
+            </div>
         </div>
-    </div>
-    <div class="col-md-9">
-        <h2 class="mb-4">{% if category %}{{ category.name }}{% else %}All Products{% endif %}</h2>
+
         <div class="row">
-            {% for product in products %}
-            <div class="col-md-4 mb-4">
-                <div class="card h-100 shadow-sm border-0">
-                    {% if product.image %}
-                        <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}" style="height: 200px; object-fit: cover;">
-                    {% else %}
-                        <div class="bg-light text-center py-5" style="height: 200px;">
-                            <i class="bi bi-image display-1 text-muted"></i>
-                        </div>
-                    {% endif %}
-                    <div class="card-body">
-                        <h5 class="card-title">{{ product.name }}</h5>
-                        <p class="card-text text-muted small">{{ product.description|truncatewords:10 }}</p>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span class="h5 mb-0 text-primary">${{ product.price }}</span>
-                            <a href="{% url 'product_detail' product.slug %}" class="btn btn-sm btn-outline-dark">Details</a>
-                        </div>
+            <!-- Sidebar -->
+            <div class="col-lg-3">
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-header bg-black py-3">
+                        <h5 class="fw-bold mb-0 text-uppercase small tracking-widest">Categories</h5>
+                    </div>
+                    <div class="list-group list-group-flush">
+                        <a href="{% url 'shop_home' %}" class="list-group-item list-group-item-action bg-dark text-white border-secondary {% if not category %}active bg-primary-theme{% endif %}">
+                            All Products
+                        </a>
+                        {% for c in categories %}
+                        <a href="{% url 'product_list_by_category' c.slug %}" class="list-group-item list-group-item-action bg-dark text-white border-secondary {% if category.slug == c.slug %}active bg-primary-theme{% endif %}">
+                            {{ c.name }}
+                        </a>
+                        {% endfor %}
                     </div>
                 </div>
+                
+                <!-- Promo Card -->
+                <div class="card border-0 bg-primary-theme text-white p-4 text-center rounded-3">
+                    <h4 class="fw-bold mb-3">20% OFF</h4>
+                    <p class="small mb-4">On all premium supplements for new members.</p>
+                    <a href="{% url 'register' %}" class="btn btn-light btn-sm rounded-pill fw-bold text-uppercase px-4">Claim Now</a>
+                </div>
             </div>
-            {% empty %}
-            <div class="col-12 text-center py-5">
-                <p class="text-muted">No products found in this category.</p>
+
+            <!-- Product Grid -->
+            <div class="col-lg-9">
+                <div class="row g-4">
+                    {% for product in products %}
+                    <div class="col-md-4 col-sm-6">
+                        <div class="card h-100 border-0 shadow-sm product-card">
+                            <div class="position-relative overflow-hidden">
+                                {% if product.image %}
+                                    <img src="{{ product.image.url }}" class="card-img-top transition-all" alt="{{ product.name }}" style="height: 250px; object-fit: cover;">
+                                {% else %}
+                                    <div class="bg-black text-center py-5 d-flex align-items-center justify-content-center" style="height: 250px;">
+                                        <i class="bi bi-image display-1 text-secondary"></i>
+                                    </div>
+                                {% endif %}
+                                <div class="product-badge position-absolute top-0 start-0 m-3">
+                                    <span class="badge bg-primary-theme rounded-pill px-3 py-2 text-uppercase fw-bold small">New</span>
+                                </div>
+                            </div>
+                            <div class="card-body p-4">
+                                <h5 class="fw-bold mb-2 h-100">{{ product.name }}</h5>
+                                <p class="text-secondary small mb-4">{{ product.description|truncatewords:8 }}</p>
+                                <div class="d-flex justify-content-between align-items-center mt-auto">
+                                    <span class="h4 mb-0 fw-bold text-primary-theme">${{ product.price }}</span>
+                                    <a href="{% url 'product_detail' product.slug %}" class="btn btn-outline-light btn-sm rounded-pill px-3 fw-bold">Details</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="col-12 text-center py-5">
+                        <div class="py-5">
+                            <i class="bi bi-search display-1 text-secondary mb-4"></i>
+                            <h3 class="fw-bold">No Products Found</h3>
+                            <p class="text-secondary">Try browsing another category or check back later.</p>
+                            <a href="{% url 'shop_home' %}" class="btn btn-primary-theme text-white rounded-pill px-5 py-2 mt-3 fw-bold">BACK TO SHOP</a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
             </div>
-            {% endfor %}
         </div>
     </div>
-</div>
+</section>
 {% endblock %}
