@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}Confirm Order - FitnessHub{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-success text-white py-3 text-center">
+                <h4 class="mb-0">Confirm Your Order</h4>
+            </div>
+            <div class="card-body p-4 text-center">
+                <h2 class="mb-3 text-primary">{{ product.name }}</h2>
+                <div class="display-4 mb-4">${{ product.price }}</div>
+                <p class="text-muted mb-4">You are about to place an order for this product. Our team will process your order soon.</p>
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-success btn-lg">Place Order</button>
+                        <a href="{% url 'product_detail' product.slug %}" class="btn btn-outline-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
